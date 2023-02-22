@@ -1,0 +1,192 @@
+﻿@using System.Configuration;
+
+@model Administrador.Models.ModelLogin
+
+<link href="~/RecursosExternos/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+@*<script src="~/RecursosExternos/bootstrap.min.js"></script>*@
+<script src="~/RecursosExternos/jquery.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administrador</title>
+
+
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="~/RecursosExternos/semantic.css">
+    <link rel="stylesheet" type="text/css" href="~/RecursosExternos/semantic.min.css">
+    <style>
+
+
+
+        html, body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('../../Recursos/Imagenes/Fondo.jpg');
+            background-size: cover;
+            background-repeat: repeat;
+            height: 100%;
+            font-family: 'Numans', sans-serif;
+        }
+
+        .container {
+            height: 100%;
+            align-content: center;
+        }
+
+        .card {
+            height: 250px;
+            margin-top: auto;
+            margin-bottom: auto;
+            width: 450px;
+            background-color: rgba(0,0,0,0.5) !important;
+        }
+
+        .social_icon span {
+            font-size: 60px;
+            margin-left: 10px;
+            color: #41CBFF;
+        }
+
+            .social_icon span:hover {
+                color: white;
+                cursor: pointer;
+            }
+
+        .card-header h3 {
+            color: white;
+        }
+
+        .social_icon {
+            position: absolute;
+            right: 20px;
+            top: -45px;
+        }
+
+        .input-group-prepend span {
+            width: 50px;
+            background-color: #41CBFF;
+            color: black;
+            border: 0 !important;
+        }
+
+        input:focus {
+            outline: 0 0 0 0 !important;
+            box-shadow: 0 0 0 0 !important;
+        }
+
+        .remember {
+            color: white;
+        }
+
+            .remember input {
+                width: 20px;
+                height: 20px;
+                margin-left: 15px;
+                margin-right: 5px;
+            }
+
+        .login_btn {
+            color: black;
+            background-color: #41CBFF;
+            width: 100px;
+        }
+
+            .login_btn:hover {
+                color: black;
+                background-color: white;
+            }
+
+        .links {
+            color: white;
+        }
+
+            .links a {
+                margin-left: 4px;
+            }
+    </style>
+    <script>
+         var urlValidaUsuario = '@Url.Action("ValidarLogin", "Login")';
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+
+                <div class="card-body">
+                    <h3 class="ui center aligned header" style="color:white">
+                        @*<img src="~/Recursos/Imagenes/LogoBackline.png" class="ui image">*@
+                        Administrador
+                    </h3>
+                    <div class="d-flex justify-content-end social_icon">
+
+                        <span data-toggle="tooltip" title="Acceso a videos de apoyo"><i onclick="window.open(@ConfigurationSettings.AppSettings.Get("URL_Videos"),'_blank') ;" class="fab fa-youtube"></i></span>
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input id="txtUsuario" type="text" class="form-control" placeholder="nombre de usuario" value=@Model.Usuario>
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input id="txtPassword" type="password" class="form-control" placeholder="password" value=@Model.Password>
+                    </div>
+                    <div class="form-group">
+
+                        <button id="btnLogin" class="btn float-right login_btn" onclick="ValidarUsuario();">
+                            <i class="fas fa-key"></i>
+                            Entrar
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <div id="divErroLogin" class="ui icon hidden negative message">
+                            <i class="exclamation triangle icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">
+                                            Error de login
+                                        </font>
+                                    </font>
+                                </div>
+                                <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">El nombre de usuario o la contraseña son incorrectos.</font></font></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+
+                    <div style="text-align: right">
+                        <a class="ui black tag label">Versión: 1.0</a>
+                        <a class="ui black tag label">Fecha: Sin Fecha</a>
+                    </div>
+                    @*<div class="d-flex justify-content-center links">
+                            ¿necesita una guía para utilizar el software?
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <p> <a href="~/Files/Manual de uso CCAA v2.pdf">descárguela acá</a>.</p>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+</body>
+</html>
+
+<script src="~/ScriptsVistas/LogicaLogin.js"></script>
