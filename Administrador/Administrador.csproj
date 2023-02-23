@@ -171,7 +171,9 @@
     <Content Include="Recursos\Imagenes\BtnLog.png" />
     <Content Include="Recursos\Imagenes\BtnProducto.png" />
     <Content Include="Recursos\Imagenes\BtnUser.png" />
+    <Content Include="Recursos\Imagenes\Btnveh.png" />
     <Content Include="Recursos\Imagenes\btnYou.png" />
+    <Content Include="Recursos\Imagenes\car.png" />
     <Content Include="Recursos\Imagenes\Fondo.jpg" />
     <Content Include="Recursos\Imagenes\Wall1.jpg" />
     <Content Include="Recursos\Imagenes\WallMedico.jpg" />
