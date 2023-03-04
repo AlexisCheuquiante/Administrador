@@ -123,6 +123,7 @@
     <Compile Include="Controllers\AdminPersonasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MantenedorVehiculosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,6 +180,7 @@
     <Content Include="Recursos\Imagenes\WallMedico.jpg" />
     <Content Include="ScriptsVistas\LogicaAdminPersonas.js" />
     <Content Include="ScriptsVistas\LogicaLogin.js" />
+    <Content Include="ScriptsVistas\LogicaMantenedorVehiculos.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="CSS\slippry.scss" />
@@ -214,6 +216,8 @@
     <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\AdminPersonas\Index.cshtml" />
     <Content Include="Views\AdminPersonas\AdminPersonas.cshtml" />
+    <Content Include="Views\MantenedorVehiculos\Index.cshtml" />
+    <Content Include="Views\MantenedorVehiculos\MantenedorVehiculos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -44,6 +44,7 @@
     <Compile Include="ConsultaSi_No.cs" />
     <Compile Include="Filtro.cs" />
     <Compile Include="Persona.cs" />
+    <Compile Include="Recinto.cs" />
     <Compile Include="TipoInquilino.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

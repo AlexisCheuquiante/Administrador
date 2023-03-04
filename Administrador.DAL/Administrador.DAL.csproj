@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="ConsultaSi_NoDAL.cs" />
     <Compile Include="PersonaDAL.cs" />
+    <Compile Include="RecintoDAL.cs" />
     <Compile Include="TipoInquilinoDAL.cs" />
     <Compile Include="UsuarioDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

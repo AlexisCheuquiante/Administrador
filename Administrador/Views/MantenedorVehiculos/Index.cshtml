@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/MantenedorVehiculos/MantenedorVehiculos.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" />
+    <title>Mantenedor de Vehículos</title>
+    <!-- Estilos y funciones básicas de funcionamiento -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Semantic UI CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+
+    <script src="~/ScriptsVistas/LogicaMantenedorVehiculos.js"></script>
+
+    <style>
+
+        html, body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../Recursos/Imagenes/Fondo.jpg');
+            background-size: cover;
+            background-repeat: repeat;
+            height: 100%;
+            font-family: 'Numans', sans-serif;
+        }
+
+        .card-img-top {
+            width: 150px;
+        }
+
+        .contenedor-imagen {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+
+
+
+    <script>
+
+        var urlObtenerRecintos = '@Url.Action("ObtenerRecintos", "MantenedorVehiculos")';
+
+        $(document).ready(function () {
+
+            $('.ui.selection.dropdown').dropdown();
+            $('.ui.menu .ui.dropdown').dropdown({
+                on: 'hover'
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div @*class="modal fade"*@ id="modalMantenedorProductos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
+        <div class="modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h3 class="modal-title" id="exampleModalLabel">
+                        @*<img src="~/Recursos/Imagenes/LogoBackline.png" style="width: 50px" />*@
+                        Mantenedor de vehículos
+                    </h3>
+                </div>
+                @*<img class="ui fluid image" src="~/Recursos/Imagenes/LogoEsyser_v2.png" />*@
+                <div class="modal-body">
+                    <div class="image content">
+                        <div class="ui info message">
+                            <div class="header">
+                                Atención
+                            </div>
+                            Debes completar los campos con la mayor exactitud posible.
+                            <div class="ui divider"></div>
+                            <div class="ui form">
+                                <form>
+                                    <div class="two fields">
+                                        <div id="divcmbRecinto" class="field" style="width: 40%">
+                                            <label>Recinto</label>
+                                            <select id="cmbRecinto" name="cmbRecinto" class="ui search selection dropdown">
+                                            </select>
+                                        </div>
+                                        <div id="divcmbCopropietario" class="field" style="width: 100%">
+                                            <label>Copropietario</label>
+                                            <select id="cmbCopropietario" name="cmbCopropietario" class="ui search selection dropdown">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="two fields">
+                                        <div id="divcmbTipoVehiculo" class="field" style="width: 40%">
+                                            <label>Tipo de vehículo</label>
+                                            <select id="cmbTipoVehiculo" name="cmbTipoVehiculo" class="ui search selection dropdown">
+                                            </select>
+                                        </div>
+                                        <div id="divtxtPatente" class="field" style="width:60%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Patente</font></font></label>
+                                            <input id="txtPatente" type="text" placeholder="" autocomplete="off">
+                                        </div>
+                                        <div id="divtxtEstacionamiento" class="field" style="width:60%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Estacionamiento</font></font></label>
+                                            <input id="txtEstacionamiento" type="text" placeholder="" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="two fields">
+                                        <div class="field" style="width:100%">
+                                            <label>Observación</label>
+                                            <textarea id="txtObservación"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divExito" class="ui icon hidden positive  message">
+                        <i class="stopwatch icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Éxito!!
+                            </div>
+                            <p>El registro fue guardado con éxito.</p>
+                        </div>
+                    </div>
+                    <div id="divError" class="ui icon hidden negative message">
+                        <i class="stopwatch icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Error!!
+                            </div>
+                            <p>El registro no fue guardado.</p>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div id="DivMessajeErrorGeneral" class="ui error hidden message" style="margin-left:auto; margin-right:auto; width:100%">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Se han encontrado algunos problemas, revíselos...
+                            </div>
+                            <ul id="listMessajeError" class="list"></ul>
+                        </div>
+                    </div>
+                    <br />
+                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarPersona();">
+                        <i class="check circle icon"></i><font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                Guardar
+                            </font>
+                        </font>
+                    </button>
+                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/Home')">
+                        <i class="home icon"></i><font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                Volver
+                            </font>
+                        </font>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
