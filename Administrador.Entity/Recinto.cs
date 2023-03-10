@@ -16,6 +16,8 @@ namespace Administrador.Entity
         public int Reg_Id { get; set; }
         public int Com_Id { get; set; }
         public int Pisos { get; set; }
+        public int Casas { get; set; }
+        public int Viviendas { get; set; }
         public bool Eliminado { get; set; }
     }
 }

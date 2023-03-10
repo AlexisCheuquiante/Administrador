@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Administrador.Entity
 {
-    public class Filtro
+    public class Comuna
     {
         public int Id { get; set; }
-        public int Emp_Id { get; set; }
-        public int Res_Id { get; set; }
         public int Reg_Id { get; set; }
-        public string Usuario { get; set; }
-        public string Password { get; set; }
+        public string NombreComuna { get; set; }
+        public int Tide_Id { get; set; }
+
     }
 }

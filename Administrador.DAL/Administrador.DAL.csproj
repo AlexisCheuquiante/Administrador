@@ -56,12 +56,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComunaDAL.cs" />
     <Compile Include="ConsultaSi_NoDAL.cs" />
     <Compile Include="PersonaDAL.cs" />
     <Compile Include="RecintoDAL.cs" />
+    <Compile Include="RegionDAL.cs" />
     <Compile Include="TipoInquilinoDAL.cs" />
+    <Compile Include="TipoPropiedadDAL.cs" />
+    <Compile Include="TipoVehiculoDAL.cs" />
     <Compile Include="UsuarioDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VehiculoDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Administrador.Entity\Administrador.Entity.csproj">

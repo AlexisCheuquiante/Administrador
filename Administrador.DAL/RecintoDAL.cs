@@ -11,6 +11,27 @@ namespace Administrador.DAL
 {
     public class RecintoDAL
     {
+        public static Entity.Recinto InsertarRecinto(Entity.Recinto recinto)
+        {
+            Database db = DatabaseFactory.CreateDatabase("baseDatosEdificios");
+            DbCommand dbCommand = db.GetStoredProcCommand("SP_RES_RECINTO_INS");
+
+            db.AddInParameter(dbCommand, "ID", DbType.Int32, recinto.Id != 0 ? recinto.Id : (object)null);
+            db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, recinto.Emp_Id != 0 ? recinto.Emp_Id : (object)null);
+            db.AddInParameter(dbCommand, "TIPO_ID", DbType.Int32, recinto.Tipo_Id != 0 ? recinto.Tipo_Id : (object)null);
+            db.AddInParameter(dbCommand, "NOMBRE", DbType.String, recinto.NombreRecinto != "" ? recinto.NombreRecinto : (object)null);
+            db.AddInParameter(dbCommand, "DIRECCION", DbType.String, recinto.DireccionRecinto != "" ? recinto.DireccionRecinto : (object)null);
+            db.AddInParameter(dbCommand, "REG_ID", DbType.Int32, recinto.Reg_Id != 0 ? recinto.Reg_Id : (object)null);
+            db.AddInParameter(dbCommand, "COM_ID", DbType.Int32, recinto.Com_Id != 0 ? recinto.Com_Id : (object)null);
+            db.AddInParameter(dbCommand, "PISOS", DbType.Int32, recinto.Pisos != 0 ? recinto.Pisos : (object)null);
+            db.AddInParameter(dbCommand, "CASAS", DbType.Int32, recinto.Casas != 0 ? recinto.Casas : (object)null);
+            db.AddInParameter(dbCommand, "VIVIENDAS", DbType.Int32, recinto.Viviendas != 0 ? recinto.Viviendas : (object)null);
+            db.AddInParameter(dbCommand, "ELIMINADO", DbType.Byte, recinto.Eliminado == true ? 1 : 0);
+
+            recinto.Id = int.Parse(db.ExecuteScalar(dbCommand).ToString());
+
+            return recinto;
+        }
         public static List<Entity.Recinto> ObtenerRecintos(Entity.Filtro filtro)
         {
             List<Entity.Recinto> lista = new List<Entity.Recinto>();

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Administrador.Models.MantenedorVehiculosModel
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/MantenedorVehiculos/MantenedorVehiculos.cshtml";
 }
@@ -46,6 +48,12 @@
     <script>
 
         var urlObtenerRecintos = '@Url.Action("ObtenerRecintos", "MantenedorVehiculos")';
+        var urlObtenerTipoVehiculo = '@Url.Action("ObtenerTipoVehiculo", "MantenedorVehiculos")';
+        var urlObtenerPersonas = '@Url.Action("ObtenerPersonas", "MantenedorVehiculos")';
+        var urlInsertarVehiculo = '@Url.Action("InsertarVehiculo", "MantenedorVehiculos")';
+        var urlBusquedaFiltro = '@Url.Action("BusquedaFiltro", "MantenedorVehiculos")';
+        var urlObtenerVehiculos = '@Url.Action("ObtenerVehiculos", "MantenedorVehiculos")';
+        var urlEliminarVehiculo = '@Url.Action("EliminarVehiculo", "MantenedorVehiculos")';
 
         $(document).ready(function () {
 
@@ -58,7 +66,98 @@
     </script>
 </head>
 <body>
-    <div @*class="modal fade"*@ id="modalMantenedorProductos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
+    <br />
+    <div class="ui bottom attached segment" style="margin-left:auto; margin-right:auto; width:95%; opacity:0.9">
+        <div class="ui icon warning message">
+            <i class="search icon"></i>
+            <div class="content">
+                <div class="header">
+                    Filtro
+                </div>
+                <p>Para lograr una búsqueda efectiva debe seleccionar al menos un filtro.</p>
+            </div>
+        </div>
+        <table border="0">
+            <tr>
+                <td id="tdFiltroRecinto">
+                    <div id="divcmbCopropietario" class="field" style="width: 100%">
+                        <label>Recinto</label>
+                        <select id="cmbFiltroRecinto" name="cmbFiltroRecinto" class="ui search selection dropdown">
+                        </select>
+                    </div>
+                </td>
+
+                <td style="width:5px"></td>
+                <td>
+                    <div id="btnBuscarFiltro" style="width:150px" class="ui blue right labeled icon button" onclick="BusquedaFiltro();">
+                        Buscar
+                        <i class="search icon"></i>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <br />
+        <div class="fields">
+            <div id="btnAgregarMantenedorNegocio" data-toggle="modal" data-target="#modalMantenedorVehiculos" class="ui blue labeled icon button">
+                Agregar vehiculo
+                <i class="checkmark icon"></i>
+            </div>
+            <div class="ui icon red button" onclick="window.location.replace('/Home')">Volver<i class="left chevron icon"></i></div>
+            @*<div id="btnExportar" class="ui labeled purple icon button" onclick="ExportarExcel();">
+                    <i class="table download icon"></i>Exportar a Excel
+                </div>*@
+        </div>
+        <table id="tabla" class="ui celled striped inverted table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Copropietario</th>
+                    <th>Patente</th>
+                    <th>Tipo Vehiculo</th>
+                    <th>Estacionamiento</th>
+                    <th>Observación</th>
+                    <th>Recinto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lista in Model.lista)
+                {
+                    <tr>
+                        <td>
+                            <button class="ui vertical animated blue button" tabindex="0" data-toggle="modal" data-target="#modalMantenedorVehiculos" value="@lista.Id" onclick="ObtenerVehiculos(this.value, this);">
+                                <div class="hidden content">Editar</div>
+                                <div class="visible content">
+                                    <i class="pencil icon"></i>
+                                </div>
+                            </button>
+                            <button class="ui vertical animated red button" tabindex="0" data-toggle="modal" data-target="#modalEliminar" value="@lista.Id" onclick="PreparaEliminarVehiculo(this.value, this);">
+                                <div class="hidden content">Eliminar</div>
+                                <div class="visible content">
+                                    <i class="trash icon"></i>
+                                </div>
+                            </button>
+                        </td>
+                        <td>@lista.NombrePersona</td>
+                        <td>@lista.Patente</td>
+                        <td>@lista.TipoVehiculo</td>
+                        <td>@lista.Estacionamiento</td>
+                        <td>@lista.Observacion</td>
+                        <td>@lista.Recinto</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="13">
+
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="modal fade" id="modalMantenedorVehiculos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
         <div class="modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,7 +181,7 @@
                                     <div class="two fields">
                                         <div id="divcmbRecinto" class="field" style="width: 40%">
                                             <label>Recinto</label>
-                                            <select id="cmbRecinto" name="cmbRecinto" class="ui search selection dropdown">
+                                            <select id="cmbRecinto" name="cmbRecinto" class="ui search selection dropdown" onchange="ObtenerPersonas();">
                                             </select>
                                         </div>
                                         <div id="divcmbCopropietario" class="field" style="width: 100%">
@@ -90,6 +189,14 @@
                                             <select id="cmbCopropietario" name="cmbCopropietario" class="ui search selection dropdown">
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="fields">
+
+                                        <div id="divtxtCopropietario" class="field" style="width:100%; display:none">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Copropietario asignado</font></font></label>
+                                            <input id="txtCopropietario" type="text" placeholder="" autocomplete="off" readonly>
+                                        </div>
+
                                     </div>
                                     <div class="two fields">
                                         <div id="divcmbTipoVehiculo" class="field" style="width: 40%">
@@ -144,14 +251,14 @@
                         </div>
                     </div>
                     <br />
-                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarPersona();">
+                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarVehiculo();">
                         <i class="check circle icon"></i><font style="vertical-align: inherit;">
                             <font style="vertical-align: inherit;">
                                 Guardar
                             </font>
                         </font>
                     </button>
-                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/Home')">
+                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/MantenedorVehiculos?limpiar=1')">
                         <i class="home icon"></i><font style="vertical-align: inherit;">
                             <font style="vertical-align: inherit;">
                                 Volver
@@ -162,5 +269,49 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLongTitle">Eliminar vehículo</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="divConsultaElimina" class="ui icon warning message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                ¿Desea eliminar este vehículo?
+                            </div>
+                            <p>Este vehículo sera eliminado de forma lógica desde la base de datos</p>
+                        </div>
+                    </div>
+                    <div id="divExitoElimina" class="ui icon hidden positive  message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Éxito!!
+                            </div>
+                            <p>El vehículo fue eliminado con éxito.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btnEliminar" onclick="EliminaVehiculo();" class="ui red right labeled icon button">
+                        Eliminar vehículo
+                        <i class="checkmark icon"></i>
+                    </div>
+                    <div id="btnCancelar" data-dismiss="modal" class="ui right labeled icon button">
+                        Cancelar
+                        <i class="cancel icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+<input type="hidden" id="idVehiculoSeleccionado" value="0" />
