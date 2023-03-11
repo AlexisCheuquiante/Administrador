@@ -122,6 +122,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminPersonasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomePrivadoController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MantenedorRecintosController.cs" />
     <Compile Include="Controllers\MantenedorVehiculosController.cs" />
@@ -226,6 +227,8 @@
     <Content Include="Views\MantenedorVehiculos\MantenedorVehiculos.cshtml" />
     <Content Include="Views\MantenedorRecintos\Index.cshtml" />
     <Content Include="Views\MantenedorRecintos\MantenedorRecintos.cshtml" />
+    <Content Include="Views\HomePrivado\Index.cshtml" />
+    <Content Include="Views\HomePrivado\HomePrivado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

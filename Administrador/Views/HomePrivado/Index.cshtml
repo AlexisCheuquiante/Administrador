@@ -1,4 +1,5 @@
-﻿@model Administrador.Models.HomeModel
+﻿
+@model Administrador.Models.HomeModel
 
 @{
     ViewBag.Title = "Index";
@@ -9,7 +10,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" />
-    <title>Home</title>
+    <title>Home privado</title>
     <!-- Estilos y funciones básicas de funcionamiento -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -107,86 +108,12 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col-md-4">
-                            <div class="card mb-4 shadow-sm" style="opacity:.85">
-                                <div class="contenedor-imagen">
-                                    <img class="card-img-top" src="~/Recursos/Imagenes/BtnLog.png" alt="Card image cap">
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Aquí podrás ver el log de los movimientos más importantes dentro del sistema.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <div id="btnMarketPlace" onclick="window.location.href = '/log'" class="ui right labeled icon black button">
-                                                Log del sistema
-                                                <i class="hand point left icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-4 shadow-sm" style="opacity:.85">
-                                <div class="contenedor-imagen">
-                                    <img class="card-img-top" src="~/Recursos/Imagenes/BtnUser.png" alt="Card image cap">
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Aquí podrás crear y editar los usuarios del sistema y sus privilegios.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <div id="btnMarketPlace" onclick="window.location.href = '/MantenedorUsuarios'" class="ui right labeled icon black button">
-                                                Usuarios y privilegios
-                                                <i class="hand point left icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-4 shadow-sm" style="opacity:.85">
-                                <div class="contenedor-imagen">
-                                    <img class="card-img-top" src="~/Recursos/Imagenes/btnRecintos.png" alt="Card image cap">
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Aquí podrás crear y editar los recintos del sistema.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <div id="btnMarketPlace" onclick="window.location.href = '/MantenedorRecintos'" class="ui right labeled icon black button">
-                                                Recintos
-                                                <i class="hand point left icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-4 shadow-sm" style="opacity:.85">
-                                <div class="contenedor-imagen">
-                                    <img class="card-img-top" src="~/Recursos/Imagenes/btnYou.png" alt="Card image cap">
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Aquí podrás ver videos de referencia para el uso de los módulos.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <div id="btnMarketPlace" onclick="window.location.href = '/videos'" class="ui right labeled icon black button">
-                                                ver videos
-                                                <i class="youtube icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+
 </body>
 </html>

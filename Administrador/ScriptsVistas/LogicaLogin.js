@@ -40,7 +40,7 @@ function ValidarUsuario() {
         data: { entity: strParams },
         success: function (data) {
             if (data === 'exito') {
-                window.location.href = "/home/index";
+                window.location.href = "/homePrivado/index";
             }
             if (data === 'error') {
                 $('#divErroLogin').removeClass("hidden");

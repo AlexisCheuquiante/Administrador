@@ -38,15 +38,6 @@ namespace Administrador.Controllers
             if (usuarios != null && usuarios.Count == 1)
             {
                 SessionH.Usuario = usuarios[0];
-
-                //Entity.Bitacora bitacora = new Entity.Bitacora();
-                //bitacora.UsrId = SessionH.Usuario.Id;
-                //bitacora.EmpId = SessionH.Usuario.EmpId;
-                //bitacora.BodeId = SessionH.Usuario.BodeId;
-                //bitacora.Modulo = "Login";
-                //bitacora.Glosa = "Ingreso al sistema";
-                //DAL.BitacoraDAL.InsertarBitacora(bitacora);
-
                 return new JsonResult() { ContentEncoding = Encoding.Default, Data = "exito", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
 
