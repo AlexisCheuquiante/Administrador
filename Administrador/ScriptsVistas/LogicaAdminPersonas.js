@@ -5,6 +5,7 @@ var _idPersona = 0;
 $(document).ready(function () {
    
     ObtenerTipoInquilino();
+    ObtenerJefeHogar();
 
     $('#checkMovilidadReducida').change(function () {
 
@@ -101,6 +102,53 @@ function GuardarPersona() {
         },
         error: function (ex) {
             alert('Error al guardar el producto');
+        }
+    });
+
+}
+function ObtenerJefeHogar() {
+    $.ajax({
+        url: window.urlObtenerJefeHogar,
+        type: 'POST',
+        success: function (data) {
+            $('#cmbFiltroJefeHogar').dropdown('clear');
+            $('#cmbFiltroJefeHogar').empty();
+            $('#cmbFiltroJefeHogar').append('<option value="-1">[Seleccione]</option>');
+            $.each(data,
+                function (value, item) {
+
+                    var texto = '<option value="' + item.Id + '">' + item.JefeHogar + '</option>';
+                    $('#cmbFiltroJefeHogar').append(texto);
+
+                }
+            );
+
+        },
+        error: function () {
+            alert('Error al cargar la consulta');
+        }
+    });
+
+}
+function BusquedaFiltro() {
+    $('#btnBuscarFiltro').addClass("loading");
+    $('#btnBuscarFiltro').addClass("disabled");
+
+    var entity = {
+        Per_Id: $('#cmbFiltroJefeHogar').val(),
+    }
+    $.ajax({
+        url: window.urlBusquedaFiltro,
+        type: 'POST',
+        data: { entity: entity },
+        success: function (data) {
+
+            window.location.href = '/AdminPersonas?actualizar=1';
+
+        },
+        error: function () {
+            showMessage('#divMensajePublicacionViaje', 'danger', 'Ocurrió un error al guardar la información. Por favor intente nuevamente.');
+            //hideLoading();
         }
     });
 

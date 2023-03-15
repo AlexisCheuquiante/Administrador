@@ -17,6 +17,7 @@ namespace Administrador.DAL
             DbCommand dbCommand = db.GetStoredProcCommand("SP_PER_PERSONA_INS");
 
             db.AddInParameter(dbCommand, "ID", DbType.Int32, persona.Id != 0 ? persona.Id : (object)null);
+            db.AddInParameter(dbCommand, "PER_ID", DbType.Int32, persona.Per_Id != 0 ? persona.Per_Id : (object)null);
             db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, persona.Emp_Id != 0 ? persona.Emp_Id : (object)null);
             db.AddInParameter(dbCommand, "RES_ID", DbType.Int32, persona.Res_Id != 0 ? persona.Res_Id : (object)null);
             db.AddInParameter(dbCommand, "FECHA_INGRESO", DbType.DateTime, persona.Fecha_Ingreso != DateTime.MinValue ? persona.Fecha_Ingreso : (object)null);
@@ -47,12 +48,15 @@ namespace Administrador.DAL
             db.AddInParameter(dbCommand, "ID", DbType.Int32, filtro.Id != 0 ? filtro.Id : (object)null);
             db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, filtro.Emp_Id != 0 ? filtro.Emp_Id : (object)null);
             db.AddInParameter(dbCommand, "RES_ID", DbType.Int32, filtro.Res_Id != 0 ? filtro.Res_Id : (object)null);
+            db.AddInParameter(dbCommand, "PER_ID", DbType.Int32, filtro.Per_Id != 0 ? filtro.Per_Id : (object)null);
 
             IDataReader reader = (IDataReader)db.ExecuteReader(dbCommand);
 
             try
             {
                 int ID = reader.GetOrdinal("ID");
+                int PER_ID = reader.GetOrdinal("PER_ID");
+                int JEFE_HOGAR = reader.GetOrdinal("JEFE_HOGAR");
                 int EMP_ID = reader.GetOrdinal("EMP_ID");
                 int RES_ID = reader.GetOrdinal("RES_ID");
                 int RUT = reader.GetOrdinal("RUT");
@@ -73,6 +77,8 @@ namespace Administrador.DAL
                     Entity.Persona OBJ = new Entity.Persona();
                     //BeginFields
                     OBJ.Id = (int)(!reader.IsDBNull(ID) ? reader.GetValue(ID) : 0);
+                    OBJ.Per_Id = (int)(!reader.IsDBNull(PER_ID) ? reader.GetValue(PER_ID) : 0);
+                    OBJ.JefeHogar = (String)(!reader.IsDBNull(JEFE_HOGAR) ? reader.GetValue(JEFE_HOGAR) : string.Empty);
                     OBJ.Emp_Id = (int)(!reader.IsDBNull(EMP_ID) ? reader.GetValue(EMP_ID) : 0);
                     OBJ.Res_Id = (int)(!reader.IsDBNull(RES_ID) ? reader.GetValue(RES_ID) : 0);
                     OBJ.Rut = (String)(!reader.IsDBNull(RUT) ? reader.GetValue(RUT) : string.Empty);
@@ -87,6 +93,59 @@ namespace Administrador.DAL
                     OBJ.Piso = (int)(!reader.IsDBNull(PISO) ? reader.GetValue(PISO) : 0);
                     OBJ.Depto = (int)(!reader.IsDBNull(DEPTO) ? reader.GetValue(DEPTO) : 0);
                     OBJ.Casa = (int)(!reader.IsDBNull(CASA) ? reader.GetValue(CASA) : 0);
+                    //EndFields
+
+                    lista.Add(OBJ);
+                }
+            }
+            catch (Exception ex)
+            {
+                //GlobalesDAO.InsertErrores(ex);
+                throw ex;
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+            return lista;
+
+        }
+        public static void UpdatePer_Id(int id)
+        {
+            Microsoft.Practices.EnterpriseLibrary.Data.Database db = DatabaseFactory.CreateDatabase("baseDatosEdificios");
+            DbCommand dbCommand = db.GetStoredProcCommand("SP_PER_PERSONA_UPDATE_PER");
+
+            db.AddInParameter(dbCommand, "ID", DbType.Int32, id);
+
+
+            db.ExecuteNonQuery(dbCommand);
+
+        }
+        public static List<Entity.Persona> ObtenerJefeHogar(Entity.Filtro filtro)
+        {
+            List<Entity.Persona> lista = new List<Entity.Persona>();
+            Database db = DatabaseFactory.CreateDatabase("baseDatosEdificios");
+            DbCommand dbCommand = db.GetStoredProcCommand("SP_JEFE_HOGAR_LEER");
+
+            db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, filtro.Emp_Id != 0 ? filtro.Emp_Id : (object)null);
+            db.AddInParameter(dbCommand, "RES_ID", DbType.Int32, filtro.Res_Id != 0 ? filtro.Res_Id : (object)null);
+
+            IDataReader reader = (IDataReader)db.ExecuteReader(dbCommand);
+
+            try
+            {
+                int ID = reader.GetOrdinal("ID");
+                int PER_ID = reader.GetOrdinal("PER_ID");
+                int JEFE_HOGAR = reader.GetOrdinal("JEFE_HOGAR");
+
+                while (reader.Read())
+                {
+                    Entity.Persona OBJ = new Entity.Persona();
+                    //BeginFields
+                    OBJ.Id = (int)(!reader.IsDBNull(ID) ? reader.GetValue(ID) : 0);
+                    OBJ.Per_Id = (int)(!reader.IsDBNull(PER_ID) ? reader.GetValue(PER_ID) : 0);
+                    OBJ.JefeHogar = (String)(!reader.IsDBNull(JEFE_HOGAR) ? reader.GetValue(JEFE_HOGAR) : string.Empty);
                     //EndFields
 
                     lista.Add(OBJ);

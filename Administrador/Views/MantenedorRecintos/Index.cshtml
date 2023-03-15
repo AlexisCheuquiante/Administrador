@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Administrador.Models.MantenedorRecintosModel
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/MantenedorRecintos/MantenedorRecintos.cshtml";
 }
@@ -48,7 +50,10 @@
         var urlObtenerRegiones = '@Url.Action("ObtenerRegiones", "MantenedorRecintos")';
         var urlObtenerComunas = '@Url.Action("ObtenerComunas", "MantenedorRecintos")';
         var urlObtenerTiposPropiedades = '@Url.Action("ObtenerTiposPropiedades", "MantenedorRecintos")';
-        
+        var urlInsertarRecinto = '@Url.Action("InsertarRecinto", "MantenedorRecintos")';
+        var urlObtenerRecintos = '@Url.Action("ObtenerRecintos", "MantenedorRecintos")';
+        var urlEliminarRecinto = '@Url.Action("EliminarRecinto", "MantenedorRecintos")';
+
         $(document).ready(function () {
 
             $('.ui.selection.dropdown').dropdown();
@@ -60,7 +65,65 @@
     </script>
 </head>
 <body>
-    <div @*class="modal fade"*@ id="modalMantenedorRecintos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
+    <br />
+    <div class="ui bottom attached segment" style="margin-left:auto; margin-right:auto; width:95%; opacity:0.9">
+        <div class="fields">
+            <div id="btnAgregarMantenedorNegocio" data-toggle="modal" data-target="#modalMantenedorRecintos" class="ui blue labeled icon button">
+                Agregar recinto
+                <i class="checkmark icon"></i>
+            </div>
+            <div class="ui icon red button" onclick="window.location.replace('/Home')">Volver<i class="left chevron icon"></i></div>
+            @*<div id="btnExportar" class="ui labeled purple icon button" onclick="ExportarExcel();">
+                    <i class="table download icon"></i>Exportar a Excel
+                </div>*@
+        </div>
+        <table id="tabla" class="ui celled striped inverted table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nombre de recinto</th>
+                    <th>Dirección de recinto</th>
+                    <th>Región</th>
+                    <th>Comuna</th>
+                    <th>Tipo de recinto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lista in Model.listaRecintos)
+                {
+                    <tr>
+                        <td>
+                            <button class="ui vertical animated blue button" tabindex="0" data-toggle="modal" data-target="#modalMantenedorRecintos" value="@lista.Id" onclick="ObtenerRecintos(this.value, this);">
+                                <div class="hidden content">Editar</div>
+                                <div class="visible content">
+                                    <i class="pencil icon"></i>
+                                </div>
+                            </button>
+                            <button class="ui vertical animated red button" tabindex="0" data-toggle="modal" data-target="#modalEliminar" value="@lista.Id" onclick="PreparaEliminarRecinto(this.value, this);">
+                                <div class="hidden content">Eliminar</div>
+                                <div class="visible content">
+                                    <i class="trash icon"></i>
+                                </div>
+                            </button>
+                        </td>
+                        <td>@lista.NombreRecinto</td>
+                        <td>@lista.DireccionRecinto</td>
+                        <td>@lista.Region</td>
+                        <td>@lista.Comuna</td>
+                        <td>@lista.TipoPropiedad</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="13">
+
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="modal fade" id="modalMantenedorRecintos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
         <div class="modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -153,14 +216,14 @@
                         </div>
                     </div>
                     <br />
-                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarVehiculo();">
+                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarRecinto();">
                         <i class="check circle icon"></i><font style="vertical-align: inherit;">
                             <font style="vertical-align: inherit;">
                                 Guardar
                             </font>
                         </font>
                     </button>
-                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/MantenedorVehiculos?limpiar=1')">
+                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/MantenedorRecintos')">
                         <i class="home icon"></i><font style="vertical-align: inherit;">
                             <font style="vertical-align: inherit;">
                                 Volver
@@ -171,5 +234,49 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLongTitle">Eliminar recinto</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="divConsultaElimina" class="ui icon warning message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                ¿Desea eliminar este recinto?
+                            </div>
+                            <p>Este recinto sera eliminado de forma lógica desde la base de datos</p>
+                        </div>
+                    </div>
+                    <div id="divExitoElimina" class="ui icon hidden positive  message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Éxito!!
+                            </div>
+                            <p>El recinto fue eliminado con éxito.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btnEliminar" onclick="EliminaRecinto();" class="ui red right labeled icon button">
+                        Eliminar recinto
+                        <i class="checkmark icon"></i>
+                    </div>
+                    <div id="btnCancelar" data-dismiss="modal" class="ui right labeled icon button">
+                        Cancelar
+                        <i class="cancel icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+<input type="hidden" id="idRecintoSeleccionado" value="0" />

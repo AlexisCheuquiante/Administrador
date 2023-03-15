@@ -1,4 +1,5 @@
 ﻿var _arrayTiposPropiedades = [];
+var _idRecinto = 0;
 
 $(document).ready(function () {
 
@@ -104,4 +105,105 @@ function ObtenerTiposPropiedades() {
         }
     });
 
+}
+function GuardarRecinto() {
+
+    //if (ValidaGuardar() === false) {
+    //    //alert('no valido');
+    //    return;
+    //}
+
+    $('#btnGuardar').addClass('loading');
+    $('#btnGuardar').addClass('disabled');
+    $('#btnVolver').addClass('loading');
+    $('#btnVolver').addClass('disabled');
+
+    var strParams = {
+        Id: _idRecinto,
+        Tipo_Id: $('#cmbTipo').val(),
+        NombreRecinto: $('#txtNombreRecinto').val(),
+        DireccionRecinto: $('#txtDireccion').val(),
+        Reg_Id: $('#cmbRegion').val(),
+        Com_Id: $('#cmbComuna').val(),
+        Pisos: $('#txtPisos').val(),
+        Casas: $('#txtCasas').val(),
+        Viviendas: $('#txtViviendas').val(),
+    };
+
+    $.ajax({
+        url: window.urlInsertarRecinto,
+        type: 'POST',
+        data: { entity: strParams },
+        success: function (data) {
+            if (data === 'exito') {
+                $('#divExito').removeClass("hidden");
+                setTimeout(() => { window.location.href = '/MantenedorRecintos' }, 2000);
+            }
+            if (data === 'error') {
+
+                $('#btnGuardar').removeClass('loading');
+                $('#btnGuardar').removeClass('disabled');
+                $('#btnVolver').removeClass('loading');
+                $('#btnVolver').removeClass('disabled');
+                $('#divError').removeClass("hidden");
+            }
+
+        },
+        error: function (ex) {
+            alert('Error al guardar el recinto');
+        }
+    });
+
+}
+function ObtenerRecintos(id) {
+    $('#idRecintoSeleccionado').val(id);
+
+    id = $('#idRecintoSeleccionado').val();
+    $.ajax({
+        url: window.urlObtenerRecintos,
+        type: 'POST',
+        data: { id: id },
+        success: function (data) {
+            $("#cmbRegion").dropdown('set selected', data.Reg_Id);
+            $("#cmbComuna").dropdown('set selected', data.Com_Id);
+            $("#cmbTipo").dropdown('set selected', data.Tipo_Id);
+            $('#txtNombreRecinto').val(data.NombreRecinto)
+            $('#txtDireccion').val(data.DireccionRecinto);
+            $('#txtPisos').val(data.Pisos)
+            $('#txtCasas').val(data.Casas)
+            $('#txtViviendas').val(data.Viviendas)
+            
+        },
+
+        error: function () {
+            alert('Error al cargar el vehiculo seleccionado');
+        }
+    });
+    _idRecinto = id;
+}
+function PreparaEliminarRecinto(id) {
+    $('#idRecintoSeleccionado').val(id);
+
+}
+function EliminaRecinto() {
+    $('#btnEliminar').addClass('loading');
+    $('#btnEliminar').addClass('disabled');
+
+    id = $('#idRecintoSeleccionado').val();
+    $.ajax({
+        url: window.urlEliminarRecinto,
+        type: 'POST',
+        data: { id: id },
+        success: function (data) {
+            if (data === 'exito') {
+                $('#divConsultaElimina').addClass("hidden");
+                $('#divExitoElimina').removeClass("hidden");
+                setTimeout(() => { window.location.href = '/MantenedorRecintos' }, 2000);
+            }
+        },
+        error: function (data) {
+            console.log(data);
+            showMessage('body', 'danger', 'Ocurrió un error al eliminar el usuario seleccionado.' + data);
+        }
+    });
 }

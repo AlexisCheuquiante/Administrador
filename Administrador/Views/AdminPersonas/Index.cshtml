@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Administrador.Models.AdminPersonasModel
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/AdminPersonas/AdminPersonas.cshtml";
 }
@@ -47,6 +49,8 @@
 
         var urlObtenerTipoInquilino = '@Url.Action("ObtenerTipoInquilino", "AdminPersonas")';
         var urlInsertarPersona = '@Url.Action("InsertarPersona", "AdminPersonas")';
+        var urlObtenerJefeHogar = '@Url.Action("ObtenerJefeHogar", "AdminPersonas")';
+        var urlBusquedaFiltro = '@Url.Action("BusquedaFiltro", "AdminPersonas")';
         
 
         $(document).ready(function () {
@@ -60,7 +64,105 @@
     </script>
 </head>
 <body>
-    <div @*class="modal fade"*@ id="modalMantenedorProductos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
+    <br />
+    <div class="ui bottom attached segment" style="margin-left:auto; margin-right:auto; width:95%; opacity:0.9">
+        @if (SessionH.Usuario.Rol_Id == 1)
+        {
+            <div class="ui icon warning message">
+                <i class="search icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Filtro
+                    </div>
+                    <p>Para lograr una búsqueda efectiva debe seleccionar al menos un filtro.</p>
+                </div>
+            </div>
+            <table border="0">
+                <tr>
+                    <td id="tdFiltroRecinto">
+                        <div id="divcmbFiltroJefeHogar" class="field" style="width: 100%">
+                            <label>Jefe de hogar</label>
+                            <select id="cmbFiltroJefeHogar" name="cmbFiltroJefeHogar" class="ui search selection dropdown">
+                            </select>
+                        </div>
+                    </td>
+
+                    <td style="width:5px"></td>
+                    <td>
+                        <div id="btnBuscarFiltro" style="width:150px" class="ui blue right labeled icon button" onclick="BusquedaFiltro();">
+                            Buscar
+                            <i class="search icon"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+            </table>
+            <br />
+        }
+        <div class="fields">
+            <div id="btnAgregarMantenedorNegocio" data-toggle="modal" data-target="#modalPersonas" class="ui blue labeled icon button">
+                Agregar
+                <i class="checkmark icon"></i>
+            </div>
+            <div class="ui icon red button" onclick="window.history.back()">Volver<i class="left chevron icon"></i></div>
+            @*<div id="btnExportar" class="ui labeled purple icon button" onclick="ExportarExcel();">
+                <i class="table download icon"></i>Exportar a Excel
+            </div>*@
+        </div>
+        <table id="tabla" class="ui celled striped inverted table">
+            <thead>
+                <tr>
+                    <th></th>
+
+
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Tiene movilidad reducida</th>
+                    <th>Es menor de Edad</th>
+                    <th>Jefe de hogar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lista in Model.listaPersonas)
+                {
+                    <tr>
+                        <td>
+                            <button class="ui vertical animated blue button" tabindex="0" data-toggle="modal" data-target="#modalPersonas" value="@lista.Id" onclick="ObtenerRecintos(this.value, this);">
+                                <div class="hidden content">Editar</div>
+                                <div class="visible content">
+                                    <i class="pencil icon"></i>
+                                </div>
+                            </button>
+                            <button class="ui vertical animated red button" tabindex="0" data-toggle="modal" data-target="#modalEliminar" value="@lista.Id" onclick="PreparaEliminarRecinto(this.value, this);">
+                                <div class="hidden content">Eliminar</div>
+                                <div class="visible content">
+                                    <i class="trash icon"></i>
+                                </div>
+                            </button>
+                        </td>
+
+
+                        <td>@lista.Nombre</td>
+                        <td>@lista.Correo</td>
+                        <td>@lista.Telefono_1</td>
+                        <td>@lista.Es_Movilidad_Reducida</td>
+                        <td>@lista.Es_Menor_Edad</td>
+                        <td>@lista.JefeHogar</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="13">
+
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="modal fade" id="modalPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left:auto; margin-right:auto; width:40%; opacity:1; margin-top:2%">
         <div class="modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -71,126 +173,126 @@
                     </h3>
                 </div>
                 @*<img class="ui fluid image" src="~/Recursos/Imagenes/LogoEsyser_v2.png" />*@
-            <div class="modal-body">
-                <div class="image content">
-                    <div class="ui info message">
-                        <div class="header">
-                            Atención
-                        </div>
-                        Debes completar los campos con la mayor exactitud posible.
-                        <div class="ui divider"></div>
-                        <div class="ui form">
-                            <form>
-                                <div class="two fields">
-                                    <div id="divtxtRUT" class="field" style="width:30%">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RUT</font></font></label>
-                                        <input id="txtRUT" type="text" placeholder="" autocomplete="off" style="text-transform:uppercase;">
+                <div class="modal-body">
+                    <div class="image content">
+                        <div class="ui info message">
+                            <div class="header">
+                                Atención
+                            </div>
+                            Debes completar los campos con la mayor exactitud posible.
+                            <div class="ui divider"></div>
+                            <div class="ui form">
+                                <form>
+                                    <div class="two fields">
+                                        <div id="divtxtRUT" class="field" style="width:30%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RUT</font></font></label>
+                                            <input id="txtRUT" type="text" placeholder="" autocomplete="off" style="text-transform:uppercase;">
+                                        </div>
+                                        <div id="divtxtFechaNacimiento" class="field" style="width:30%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de nacimiento</font></font></label>
+                                            <input id="txtFechaNacimiento" type="date" placeholder="" autocomplete="off">
+                                        </div>
                                     </div>
-                                    <div id="divtxtFechaNacimiento" class="field" style="width:30%">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de nacimiento</font></font></label>
-                                        <input id="txtFechaNacimiento" type="date" placeholder="" autocomplete="off">
+                                    <div class="two fields">
+                                        <div id="divtxtNombreCompleto" class="field" style="width:100%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nombre Completo</font></font></label>
+                                            <input id="txtNombreCompleto" type="text" placeholder="" autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="two fields">
-                                    <div id="divtxtNombreCompleto" class="field" style="width:100%">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nombre Completo</font></font></label>
-                                        <input id="txtNombreCompleto" type="text" placeholder="" autocomplete="off">
+                                    <div class="two fields">
+                                        <div id="divtxtCorreo" class="field" style="width:100%">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Correo</font></font></label>
+                                            <input id="txtCorreo" type="text" placeholder="" autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="two fields">
-                                    <div id="divtxtCorreo" class="field" style="width:100%">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Correo</font></font></label>
-                                        <input id="txtCorreo" type="text" placeholder="" autocomplete="off">
+                                    <div class="two fields">
+                                        <div id="divtxtTelefono1" class="field">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Teléfono 1</font></font></label>
+                                            <input id="txtTelefono1" type="text" placeholder="" autocomplete="off">
+                                        </div>
+                                        <div id="divtxtTelefono2" class="field">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Teléfono 2</font></font></label>
+                                            <input id="txtTelefono2" type="text" placeholder="" autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="two fields">
-                                    <div id="divtxtTelefono1" class="field">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Teléfono 1</font></font></label>
-                                        <input id="txtTelefono1" type="text" placeholder="" autocomplete="off">
+                                    <div class="two fields">
+                                        <div class="ui toggle checkbox">
+                                            <input id="checkMovilidadReducida" name="checkMovilidadReducida" type="checkbox">
+                                            <label>Movilidad Reducida</label>
+                                        </div>
                                     </div>
-                                    <div id="divtxtTelefono2" class="field">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Teléfono 2</font></font></label>
-                                        <input id="txtTelefono2" type="text" placeholder="" autocomplete="off">
+                                    <div class="two fields">
+                                        <div class="ui toggle checkbox">
+                                            <input id="checkMenorEdad" name="checkMenorEdad" type="checkbox">
+                                            <label>Menor de edad</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="two fields">
-                                    <div class="ui toggle checkbox">
-                                        <input id="checkMovilidadReducida" name="checkMovilidadReducida" type="checkbox">
-                                        <label>Movilidad Reducida</label>
+                                    <div class="two fields">
+                                        <div id="divcmbTipoInquilino" class="field">
+                                            <label>Tipo de Inquilino</label>
+                                            <select id="cmbTipoInquilino" name="cmbTipoInquilino" class="ui search selection dropdown">
+                                            </select>
+                                        </div>
+                                        <div id="divtxtPiso" class="field">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Piso</font></font></label>
+                                            <input id="txtPiso" type="number" placeholder="" autocomplete="off">
+                                        </div>
+                                        <div id="divtxtDepto" class="field">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Depto</font></font></label>
+                                            <input id="txtDepto" type="number" placeholder="" autocomplete="off">
+                                        </div>
+                                        <div id="divtxtCasa" class="field">
+                                            <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Casa</font></font></label>
+                                            <input id="txtCasa" type="number" placeholder="" autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="two fields">
-                                    <div class="ui toggle checkbox">
-                                        <input id="checkMenorEdad" name="checkMenorEdad" type="checkbox">
-                                        <label>Menor de edad</label>
-                                    </div>
-                                </div>
-                                <div class="two fields">
-                                    <div id="divcmbTipoInquilino" class="field">
-                                        <label>Tipo de Inquilino</label>
-                                        <select id="cmbTipoInquilino" name="cmbTipoInquilino" class="ui search selection dropdown">
-                                        </select>
-                                    </div>
-                                    <div id="divtxtPiso" class="field">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Piso</font></font></label>
-                                        <input id="txtPiso" type="number" placeholder="" autocomplete="off">
-                                    </div>
-                                    <div id="divtxtDepto" class="field">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Depto</font></font></label>
-                                        <input id="txtDepto" type="number" placeholder="" autocomplete="off">
-                                    </div>
-                                    <div id="divtxtCasa" class="field">
-                                        <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Casa</font></font></label>
-                                        <input id="txtCasa" type="number" placeholder="" autocomplete="off">
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="divExito" class="ui icon hidden positive  message">
-                    <i class="stopwatch icon"></i>
-                    <div class="content">
-                        <div class="header">
-                            Éxito!!
+                    <div id="divExito" class="ui icon hidden positive  message">
+                        <i class="stopwatch icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Éxito!!
+                            </div>
+                            <p>El registro fue guardado con éxito.</p>
                         </div>
-                        <p>El registro fue guardado con éxito.</p>
                     </div>
-                </div>
-                <div id="divError" class="ui icon hidden negative message">
-                    <i class="stopwatch icon"></i>
-                    <div class="content">
-                        <div class="header">
-                            Error!!
+                    <div id="divError" class="ui icon hidden negative message">
+                        <i class="stopwatch icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Error!!
+                            </div>
+                            <p>El registro no fue guardado.</p>
                         </div>
-                        <p>El registro no fue guardado.</p>
                     </div>
-                </div>
-                <div class="actions">
-                    <div id="DivMessajeErrorGeneral" class="ui error hidden message" style="margin-left:auto; margin-right:auto; width:100%">
-                        <i class="close icon"></i>
-                        <div class="header">
-                            Se han encontrado algunos problemas, revíselos...
+                    <div class="actions">
+                        <div id="DivMessajeErrorGeneral" class="ui error hidden message" style="margin-left:auto; margin-right:auto; width:100%">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Se han encontrado algunos problemas, revíselos...
+                            </div>
+                            <ul id="listMessajeError" class="list"></ul>
                         </div>
-                        <ul id="listMessajeError" class="list"></ul>
                     </div>
-                </div>
-                <br />
-                <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarPersona();">
-                    <i class="check circle icon"></i><font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">
-                            Guardar
+                    <br />
+                    <button id="btnGuardar" class="ui right labeled blue icon button" onclick="GuardarPersona();">
+                        <i class="check circle icon"></i><font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                Guardar
+                            </font>
                         </font>
-                    </font>
-                </button>
-                <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/Home')">
-                    <i class="home icon"></i><font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">
-                            Volver
+                    </button>
+                    <button id="btnVolver" class="ui right labeled red icon button" onclick="window.location.replace('/AdminPersonas?limpiar=1')">
+                        <i class="home icon"></i><font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">
+                                Volver
+                            </font>
                         </font>
-                    </font>
-                </button>
-            </div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

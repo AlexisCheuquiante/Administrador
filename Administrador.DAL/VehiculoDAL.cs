@@ -38,6 +38,7 @@ namespace Administrador.DAL
             db.AddInParameter(dbCommand, "ID", DbType.Int32, filtro.Id != 0 ? filtro.Id : (object)null);
             db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, filtro.Emp_Id != 0 ? filtro.Emp_Id : (object)null);
             db.AddInParameter(dbCommand, "RES_ID", DbType.Int32, filtro.Res_Id != 0 ? filtro.Res_Id : (object)null);
+            db.AddInParameter(dbCommand, "PER_ID", DbType.Int32, filtro.Per_Id != 0 ? filtro.Per_Id : (object)null);
 
             IDataReader reader = (IDataReader)db.ExecuteReader(dbCommand);
 

@@ -9,6 +9,8 @@ namespace Administrador.Entity
     public class Persona
     {
         public int Id { get; set; }
+        public int Per_Id { get; set; }
+        public string JefeHogar { get; set; }
         public int Emp_Id { get; set; }
         public int Res_Id { get; set; }
         public DateTime Fecha_Ingreso { get; set; }
