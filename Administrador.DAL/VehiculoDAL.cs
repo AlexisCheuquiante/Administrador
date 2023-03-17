@@ -38,7 +38,7 @@ namespace Administrador.DAL
             db.AddInParameter(dbCommand, "ID", DbType.Int32, filtro.Id != 0 ? filtro.Id : (object)null);
             db.AddInParameter(dbCommand, "EMP_ID", DbType.Int32, filtro.Emp_Id != 0 ? filtro.Emp_Id : (object)null);
             db.AddInParameter(dbCommand, "RES_ID", DbType.Int32, filtro.Res_Id != 0 ? filtro.Res_Id : (object)null);
-            db.AddInParameter(dbCommand, "PER_ID", DbType.Int32, filtro.Per_Id != 0 ? filtro.Per_Id : (object)null);
+            db.AddInParameter(dbCommand, "JEFE_ID", DbType.Int32, filtro.Per_Id != 0 ? filtro.Per_Id : (object)null);
 
             IDataReader reader = (IDataReader)db.ExecuteReader(dbCommand);
 
@@ -54,7 +54,8 @@ namespace Administrador.DAL
                 int TIPO_VEHICULO = reader.GetOrdinal("TIPO_VEHICULO");
                 int OBSERVACION = reader.GetOrdinal("OBSERVACION");
                 int ESTACIONAMIENTO = reader.GetOrdinal("ESTACIONAMIENTO");
-                
+                int JEFE_HOGAR = reader.GetOrdinal("JEFE_HOGAR");
+
                 while (reader.Read())
                 {
                     Entity.Vehiculo OBJ = new Entity.Vehiculo();
@@ -69,6 +70,7 @@ namespace Administrador.DAL
                     OBJ.TipoVehiculo = (String)(!reader.IsDBNull(TIPO_VEHICULO) ? reader.GetValue(TIPO_VEHICULO) : string.Empty);
                     OBJ.Observacion = (String)(!reader.IsDBNull(OBSERVACION) ? reader.GetValue(OBSERVACION) : string.Empty);
                     OBJ.Estacionamiento = (String)(!reader.IsDBNull(ESTACIONAMIENTO) ? reader.GetValue(ESTACIONAMIENTO) : string.Empty);
+                    OBJ.JefeHogar = (String)(!reader.IsDBNull(JEFE_HOGAR) ? reader.GetValue(JEFE_HOGAR) : string.Empty);
                     //EndFields
 
                     lista.Add(OBJ);

@@ -47,6 +47,11 @@ namespace Administrador.Controllers
                     SessionH.Usuario = usuarios[0];
                     return new JsonResult() { ContentEncoding = Encoding.Default, Data = "exito2", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
+                if (usuarios[0].Rol_Id == 3 || usuarios[0].Rol_Id == 4)
+                {
+                    SessionH.Usuario = usuarios[0];
+                    return new JsonResult() { ContentEncoding = Encoding.Default, Data = "exito", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
             }
 
             return new JsonResult() { ContentEncoding = Encoding.Default, Data = "error", JsonRequestBehavior = JsonRequestBehavior.AllowGet };

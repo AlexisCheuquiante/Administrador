@@ -136,6 +136,7 @@
     <Compile Include="Models\ModelLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionH.cs" />
+    <Compile Include="Utiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -182,6 +183,7 @@
     <Content Include="Recursos\Imagenes\btnYou.png" />
     <Content Include="Recursos\Imagenes\car.png" />
     <Content Include="Recursos\Imagenes\Fondo.jpg" />
+    <Content Include="Recursos\Imagenes\Icono-Informaciones.jpg" />
     <Content Include="Recursos\Imagenes\LogoYouCommunity.png" />
     <Content Include="Recursos\Imagenes\LogoYouCommunity2.png" />
     <Content Include="Recursos\Imagenes\Wall1.jpg" />

@@ -7,6 +7,16 @@ $(document).ready(function () {
     ObtenerTipoInquilino();
     ObtenerJefeHogar();
 
+    var input1 = document.getElementById("txtRUT");
+
+    input1.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+
+            FormateaRut()
+
+        }
+    });
+
     $('#checkMovilidadReducida').change(function () {
 
         if ($('#checkMovilidadReducida').is(':checked')) {
@@ -152,4 +162,87 @@ function BusquedaFiltro() {
         }
     });
 
+}
+function FormateaRut() {
+
+    var strParams = {
+
+        Rut: $('#txtRUT').val(),
+    };
+
+    $.ajax({
+        url: window.urlFormateaRut,
+        type: 'POST',
+        data: { entity: strParams },
+        success: function (data) {
+            $('#txtRUT').val(data)
+
+        },
+        //error: function () {
+        //    alert('Error al cargar los copropietarios existentes');
+        //}
+    });
+}
+function ObtenerPersonas(id) {
+    $('#idPersonaSeleccionada').val(id);
+
+    id = $('#idPersonaSeleccionada').val();
+    $.ajax({
+        url: window.urlObtenerPersonas,
+        type: 'POST',
+        data: { id: id },
+        success: function (data) {
+            $('#txtRUT').val(data.Rut)
+            $('#txtFechaNacimiento').val(data.Fecha_Nacimiento_Mostrar);
+            $('#txtNombreCompleto').val(data.Nombre)
+            $('#txtCorreo').val(data.Correo)
+            $('#txtTelefono1').val(data.Telefono_1)
+            $('#txtTelefono2').val(data.Telefono_2)
+            if (data.Es_Movilidad_Reducida == true) {
+
+                document.getElementById('checkMovilidadReducida').checked = true;
+                
+            }
+            if (data.Es_Menor_Edad == true) {
+
+                document.getElementById('checkMenorEdad').checked = true;
+                
+            }
+            $("#cmbTipoInquilino").dropdown('set selected', data.Tiin_Id);
+            $('#txtPiso').val(data.Piso)
+            $('#txtDepto').val(data.Depto)
+            $('#txtCasa').val(data.Casa)
+        },
+
+        error: function () {
+            alert('Error al cargar el vehiculo seleccionado');
+        }
+    });
+    _idPersona = id;
+}
+function PreparaEliminarPersona(id) {
+    $('#idPersonaSeleccionada').val(id);
+
+}
+function EliminaPersona() {
+    $('#btnEliminar').addClass('loading');
+    $('#btnEliminar').addClass('disabled');
+
+    id = $('#idPersonaSeleccionada').val();
+    $.ajax({
+        url: window.urlEliminarPersona,
+        type: 'POST',
+        data: { id: id },
+        success: function (data) {
+            if (data === 'exito') {
+                $('#divConsultaElimina').addClass("hidden");
+                $('#divExitoElimina').removeClass("hidden");
+                setTimeout(() => { window.location.href = '/AdminPersonas?limpiar=1' }, 2000);
+            }
+        },
+        error: function (data) {
+            console.log(data);
+            showMessage('body', 'danger', 'Ocurrió un error al eliminar el usuario seleccionado.' + data);
+        }
+    });
 }

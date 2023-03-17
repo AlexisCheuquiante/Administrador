@@ -2,39 +2,11 @@
 
 $(document).ready(function () {
 
-    ObtenerRecintos();
     ObtenerTipoVehiculo();
+    ObtenerPersonas();
+    ObtenerJefeHogar();
 });
 
-function ObtenerRecintos() {
-    $.ajax({
-        url: window.urlObtenerRecintos,
-        type: 'POST',
-        success: function (data) {
-            $('#cmbFiltroRecinto').dropdown('clear');
-            $('#cmbFiltroRecinto').empty();
-            $('#cmbFiltroRecinto').append('<option value="-1">[Seleccione recinto]</option>');
-            $('#cmbRecinto').dropdown('clear');
-            $('#cmbRecinto').empty();
-            $('#cmbRecinto').append('<option value="-1">[Seleccione]</option>');
-            $.each(data,
-                function (value, item) {
-
-                    var texto = '<option value="' + item.Id + '">' + item.NombreRecinto + '</option>';
-                    $('#cmbFiltroRecinto').append(texto);
-                    var texto = '<option value="' + item.Id + '">' + item.NombreRecinto + '</option>';
-                    $('#cmbRecinto').append(texto);
-
-                }
-            );
-
-        },
-        error: function () {
-            alert('Error al cargar los recintos');
-        }
-    });
-
-}
 function ObtenerTipoVehiculo() {
     $.ajax({
         url: window.urlObtenerTipoVehiculo,
@@ -59,23 +31,39 @@ function ObtenerTipoVehiculo() {
     });
 
 }
+function ObtenerJefeHogar() {
+    $.ajax({
+        url: window.urlObtenerJefeHogar,
+        type: 'POST',
+        success: function (data) {
+            $('#cmbFiltroJefeHogar').dropdown('clear');
+            $('#cmbFiltroJefeHogar').empty();
+            $('#cmbFiltroJefeHogar').append('<option value="-1">[Seleccione]</option>');
+            $.each(data,
+                function (value, item) {
+
+                    var texto = '<option value="' + item.Id + '">' + item.JefeHogar + '</option>';
+                    $('#cmbFiltroJefeHogar').append(texto);
+
+                }
+            );
+
+        },
+        error: function () {
+            alert('Error al cargar la consulta');
+        }
+    });
+
+}
 function ObtenerPersonas() {
-
-    var strParams = {
-
-        Res_Id: $('#cmbRecinto').val(),
-    };
 
     $.ajax({
         url: window.urlObtenerPersonas,
         type: 'POST',
-        data: { entity: strParams },
         success: function (data) {
             $('#cmbCopropietario').dropdown('clear');
             $('#cmbCopropietario').empty();
             $('#cmbCopropietario').append('<option value="-1">[Seleccione]</option>');
-
-
             $.each(data,
                 function (value, item) {
 
@@ -107,7 +95,6 @@ function GuardarVehiculo() {
     var strParams = {
         Id: _idVehiculo,
         Patente: $('#txtPatente').val(),
-        Res_Id: $('#cmbRecinto').val(),
         Per_Id: $('#cmbCopropietario').val(),
         Tive_Id: $('#cmbTipoVehiculo').val(),
         Observacion: $('#txtObservación').val(),
@@ -121,7 +108,7 @@ function GuardarVehiculo() {
         success: function (data) {
             if (data === 'exito') {
                 $('#divExito').removeClass("hidden");
-                setTimeout(() => { window.location.href = '/MantenedorVehiculos?actualizar=1' }, 2000);
+                setTimeout(() => { window.location.href = '/MantenedorVehiculos?limpiar=1' }, 2000);
             }
             if (data === 'error') {
 
@@ -144,7 +131,7 @@ function BusquedaFiltro() {
     $('#btnBuscarFiltro').addClass("disabled");
 
     var entity = {
-        Res_Id: $('#cmbFiltroRecinto').val(),
+        Per_Id: $('#cmbFiltroJefeHogar').val(),
     }
     $.ajax({
         url: window.urlBusquedaFiltro,

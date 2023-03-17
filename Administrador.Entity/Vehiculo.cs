@@ -18,6 +18,7 @@ namespace Administrador.Entity
         public string TipoVehiculo { get; set; }
         public string Observacion { get; set; }
         public string Estacionamiento { get; set; }
+        public string JefeHogar { get; set; }
         public bool Eliminado { get; set; }
     }
 }

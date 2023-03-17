@@ -51,7 +51,9 @@
         var urlInsertarPersona = '@Url.Action("InsertarPersona", "AdminPersonas")';
         var urlObtenerJefeHogar = '@Url.Action("ObtenerJefeHogar", "AdminPersonas")';
         var urlBusquedaFiltro = '@Url.Action("BusquedaFiltro", "AdminPersonas")';
-        
+        var urlFormateaRut = '@Url.Action("FormateaRut", "AdminPersonas")';
+        var urlObtenerPersonas = '@Url.Action("ObtenerPersonas", "AdminPersonas")';
+        var urlEliminarPersona = '@Url.Action("EliminarPersona", "AdminPersonas")';
 
         $(document).ready(function () {
 
@@ -68,13 +70,13 @@
     <div class="ui bottom attached segment" style="margin-left:auto; margin-right:auto; width:95%; opacity:0.9">
         @if (SessionH.Usuario.Rol_Id == 1)
         {
-            <div class="ui icon warning message">
-                <i class="search icon"></i>
+            <div class="ui icon info message">
+                <i class="comment alternate outline icon"></i>
                 <div class="content">
                     <div class="header">
-                        Filtro
+                        ¡Atención!
                     </div>
-                    <p>Para lograr una búsqueda efectiva debe seleccionar al menos un filtro.</p>
+                    <p>Recuerda que solo debes crear al jefe de hogar, ya que los integrantes de la familia serán administrados por el jefe de hogar.</p>
                 </div>
             </div>
             <table border="0">
@@ -100,6 +102,18 @@
             </table>
             <br />
         }
+        @if (SessionH.Usuario.Rol_Id == 2)
+        {
+            <div class="ui icon info message">
+                <i class="comment alternate outline icon"></i>
+                <div class="content">
+                    <div class="header">
+                        ¡Atención!
+                    </div>
+                    <p>Aquí podrás administrar a tu núcleo familiar.</p>
+                </div>
+            </div>
+        }
         <div class="fields">
             <div id="btnAgregarMantenedorNegocio" data-toggle="modal" data-target="#modalPersonas" class="ui blue labeled icon button">
                 Agregar
@@ -113,9 +127,7 @@
         <table id="tabla" class="ui celled striped inverted table">
             <thead>
                 <tr>
-                    <th></th>
-
-
+                    <th style="width:200px"></th>
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
@@ -129,13 +141,13 @@
                 {
                     <tr>
                         <td>
-                            <button class="ui vertical animated blue button" tabindex="0" data-toggle="modal" data-target="#modalPersonas" value="@lista.Id" onclick="ObtenerRecintos(this.value, this);">
+                            <button class="ui vertical animated blue button" tabindex="0" data-toggle="modal" data-target="#modalPersonas" value="@lista.Id" onclick="ObtenerPersonas(this.value, this);">
                                 <div class="hidden content">Editar</div>
                                 <div class="visible content">
                                     <i class="pencil icon"></i>
                                 </div>
                             </button>
-                            <button class="ui vertical animated red button" tabindex="0" data-toggle="modal" data-target="#modalEliminar" value="@lista.Id" onclick="PreparaEliminarRecinto(this.value, this);">
+                            <button class="ui vertical animated red button" tabindex="0" data-toggle="modal" data-target="#modalEliminar" value="@lista.Id" onclick="PreparaEliminarPersona(this.value, this);">
                                 <div class="hidden content">Eliminar</div>
                                 <div class="visible content">
                                     <i class="trash icon"></i>
@@ -147,8 +159,8 @@
                         <td>@lista.Nombre</td>
                         <td>@lista.Correo</td>
                         <td>@lista.Telefono_1</td>
-                        <td>@lista.Es_Movilidad_Reducida</td>
-                        <td>@lista.Es_Menor_Edad</td>
+                        <td>@lista.Es_Movilidad_Reducida_Str</td>
+                        <td>@lista.Es_Menor_Edad_Str</td>
                         <td>@lista.JefeHogar</td>
                     </tr>
                 }
@@ -186,7 +198,7 @@
                                     <div class="two fields">
                                         <div id="divtxtRUT" class="field" style="width:30%">
                                             <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RUT</font></font></label>
-                                            <input id="txtRUT" type="text" placeholder="" autocomplete="off" style="text-transform:uppercase;">
+                                            <input id="txtRUT" type="text" placeholder="" autocomplete="off" style="text-transform:uppercase;" @*onblur="FormateaRut()"*@>
                                         </div>
                                         <div id="divtxtFechaNacimiento" class="field" style="width:30%">
                                             <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de nacimiento</font></font></label>
@@ -296,5 +308,48 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLongTitle">Eliminar</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="divConsultaElimina" class="ui icon warning message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                ¿Desea eliminar este registro?
+                            </div>
+                            <p>Este registro sera eliminado de forma lógica desde la base de datos</p>
+                        </div>
+                    </div>
+                    <div id="divExitoElimina" class="ui icon hidden positive  message">
+                        <i class="trash icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Éxito!!
+                            </div>
+                            <p>El registro fue eliminado con éxito.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btnEliminar" onclick="EliminaPersona();" class="ui red right labeled icon button">
+                        Eliminar
+                        <i class="checkmark icon"></i>
+                    </div>
+                    <div id="btnCancelar" data-dismiss="modal" class="ui right labeled icon button">
+                        Cancelar
+                        <i class="cancel icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+<input type="hidden" id="idPersonaSeleccionada" value="0" />

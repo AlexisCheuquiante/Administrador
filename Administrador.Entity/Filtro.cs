@@ -15,5 +15,6 @@ namespace Administrador.Entity
         public int Reg_Id { get; set; }
         public string Usuario { get; set; }
         public string Password { get; set; }
+        public string Rut { get; set; }
     }
 }

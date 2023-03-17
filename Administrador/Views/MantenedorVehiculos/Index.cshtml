@@ -54,6 +54,7 @@
         var urlBusquedaFiltro = '@Url.Action("BusquedaFiltro", "MantenedorVehiculos")';
         var urlObtenerVehiculos = '@Url.Action("ObtenerVehiculos", "MantenedorVehiculos")';
         var urlEliminarVehiculo = '@Url.Action("EliminarVehiculo", "MantenedorVehiculos")';
+        var urlObtenerJefeHogar = '@Url.Action("ObtenerJefeHogar", "MantenedorVehiculos")';
 
         $(document).ready(function () {
 
@@ -68,46 +69,50 @@
 <body>
     <br />
     <div class="ui bottom attached segment" style="margin-left:auto; margin-right:auto; width:95%; opacity:0.9">
-        <div class="ui icon warning message">
-            <i class="search icon"></i>
-            <div class="content">
-                <div class="header">
-                    Filtro
+        @if (SessionH.Usuario.Rol_Id == 1)
+        {
+            <div class="ui icon warning message">
+                <i class="search icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Filtro
+                    </div>
+                    <p>Para lograr una búsqueda efectiva debe seleccionar al menos un filtro.</p>
                 </div>
-                <p>Para lograr una búsqueda efectiva debe seleccionar al menos un filtro.</p>
             </div>
-        </div>
-        <table border="0">
-            <tr>
-                <td id="tdFiltroRecinto">
-                    <div id="divcmbCopropietario" class="field" style="width: 100%">
-                        <label>Recinto</label>
-                        <select id="cmbFiltroRecinto" name="cmbFiltroRecinto" class="ui search selection dropdown">
-                        </select>
-                    </div>
-                </td>
+            <table border="0">
+                <tr>
+                    <td id="tdFiltroRecinto">
+                        <div id="divcmbFiltroJefeHogar" class="field" style="width: 100%">
+                            <label>Jefe Hogar</label>
+                            <select id="cmbFiltroJefeHogar" name="cmbFiltroJefeHogar" class="ui search selection dropdown">
+                            </select>
+                        </div>
+                    </td>
 
-                <td style="width:5px"></td>
-                <td>
-                    <div id="btnBuscarFiltro" style="width:150px" class="ui blue right labeled icon button" onclick="BusquedaFiltro();">
-                        Buscar
-                        <i class="search icon"></i>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-            </tr>
-        </table>
+                    <td style="width:5px"></td>
+                    <td>
+                        <div id="btnBuscarFiltro" style="width:150px" class="ui blue right labeled icon button" onclick="BusquedaFiltro();">
+                            Buscar
+                            <i class="search icon"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+            </table>
+        }
+
         <br />
         <div class="fields">
             <div id="btnAgregarMantenedorNegocio" data-toggle="modal" data-target="#modalMantenedorVehiculos" class="ui blue labeled icon button">
                 Agregar vehiculo
                 <i class="checkmark icon"></i>
             </div>
-            <div class="ui icon red button" onclick="window.location.replace('/Home')">Volver<i class="left chevron icon"></i></div>
+            <div class="ui icon red button" onclick="window.history.back()">Volver<i class="left chevron icon"></i></div>
             @*<div id="btnExportar" class="ui labeled purple icon button" onclick="ExportarExcel();">
-                    <i class="table download icon"></i>Exportar a Excel
-                </div>*@
+                <i class="table download icon"></i>Exportar a Excel
+            </div>*@
         </div>
         <table id="tabla" class="ui celled striped inverted table">
             <thead>
@@ -119,6 +124,7 @@
                     <th>Estacionamiento</th>
                     <th>Observación</th>
                     <th>Recinto</th>
+                    <th>Jefe de hogar</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,6 +151,7 @@
                         <td>@lista.Estacionamiento</td>
                         <td>@lista.Observacion</td>
                         <td>@lista.Recinto</td>
+                        <td>@lista.JefeHogar</td>
                     </tr>
                 }
             </tbody>
@@ -179,11 +186,6 @@
                             <div class="ui form">
                                 <form>
                                     <div class="two fields">
-                                        <div id="divcmbRecinto" class="field" style="width: 40%">
-                                            <label>Recinto</label>
-                                            <select id="cmbRecinto" name="cmbRecinto" class="ui search selection dropdown" onchange="ObtenerPersonas();">
-                                            </select>
-                                        </div>
                                         <div id="divcmbCopropietario" class="field" style="width: 100%">
                                             <label>Copropietario</label>
                                             <select id="cmbCopropietario" name="cmbCopropietario" class="ui search selection dropdown">

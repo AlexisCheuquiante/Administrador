@@ -36,6 +36,13 @@ namespace Administrador.Controllers
             }
             return View(modelo);
         }
+        public JsonResult FormateaRut(Entity.Filtro entity)
+        {
+
+            var rutFormateado = Utiles.FormateaRut(entity.Rut);
+
+            return new JsonResult() { ContentEncoding = Encoding.Default, Data = rutFormateado, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
         public JsonResult ObtenerJefeHogar()
         {
             Entity.Filtro filtro = new Entity.Filtro();
@@ -112,6 +119,30 @@ namespace Administrador.Controllers
             Session["registrosEncontrados"] = historicosEncontrados;
 
             return new JsonResult() { ContentEncoding = Encoding.Default, Data = "OK", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public JsonResult ObtenerPersonas(int id)
+        {
+            Entity.Filtro filtro = new Entity.Filtro();
+            filtro.Id = id;
+            var lista = DAL.PersonaDAL.ObtenerPersonas(filtro);
+
+            if (lista == null || lista.Count == 0)
+                return new JsonResult() { ContentEncoding = Encoding.Default, Data = "Error", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+            return new JsonResult() { ContentEncoding = Encoding.Default, Data = lista[0], JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public JsonResult EliminarPersona(int id)
+        {
+            try
+            {
+                DAL.PersonaDAL.EliminarPersona(id);
+
+                return new JsonResult() { ContentEncoding = Encoding.Default, Data = "exito", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult() { ContentEncoding = Encoding.Default, Data = "error", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
     }
 }

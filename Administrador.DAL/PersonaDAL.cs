@@ -137,7 +137,7 @@ namespace Administrador.DAL
             {
                 int ID = reader.GetOrdinal("ID");
                 int PER_ID = reader.GetOrdinal("PER_ID");
-                int JEFE_HOGAR = reader.GetOrdinal("JEFE_HOGAR");
+                int JEFE_HOGAR = reader.GetOrdinal("NOMBRE");
 
                 while (reader.Read())
                 {
@@ -162,6 +162,17 @@ namespace Administrador.DAL
             }
 
             return lista;
+
+        }
+        public static void EliminarPersona(int id)
+        {
+            Microsoft.Practices.EnterpriseLibrary.Data.Database db = DatabaseFactory.CreateDatabase("baseDatosEdificios");
+            DbCommand dbCommand = db.GetStoredProcCommand("SP_PER_PERSONA_DEL");
+
+            db.AddInParameter(dbCommand, "ID", DbType.Int32, id);
+
+
+            db.ExecuteNonQuery(dbCommand);
 
         }
     }
